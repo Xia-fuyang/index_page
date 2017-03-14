@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>墨画情</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <div class="field">
+        <div class="wrap">
+            <div class="return">
+                <div class="arrow">
+                    < </div>
+                </div>
+                <div class="deepWrap">
+                    <section class="first current page">
+                        <canvas id="canvas"></canvas>
+                        <div class="first_content">
+                            <h1>我是一个</h1>
+                            <h2 class="type_word" data-text-1="程序员" data-text-2="乐天派" data-text-3="热爱生活的人" data-text-4="热爱探索的人">
+                            <span>程序员</span>
+                        </h2>
+                        </div>
+                        <a href="http://www.miitbeian.gov.cn/" target="_blank" class="footer">皖ICP备17003848号</a>
+                    </section>
+                    <section class="second page">
+                        <div class="personal">
+                            <div class="information one">
+                                <div class="description"></div>
+                            </div>
+                            <div class="information two">
+                                <div class="description"></div>
+                            </div>
+                            <div class="information three">
+                                <div class="description"></div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="third page">
+
+                    </section>
+                    <section class="forth page">
+
+                    </section>
+                </div>
+                <div class="list">
+                    <div class="headImg">
+                    </div>
+                    <p class="nick_name">墨画情</p>
+                    <ul class="text_area">
+                        <a href="javascript://" class="page_turn">
+                            <li>个人主页</li>
+                        </a>
+                        <a href="javascript://" class="page_turn">
+                            <li>个人介绍</li>
+                        </a>
+                        <a href="javascript://" class="page_turn">
+                            <li>个人博客</li>
+                        </a>
+                        <a href="https://github.com/Xia-fuyang" target="_blank" class="page_turn">
+                            <li class="web">我的GitHub网站</li>
+                        </a>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+</body>
+<script src="js/jquery-3.1.1.min.js" charset="utf-8"></script>
+<script src="js/stars.js" charset="utf-8"></script>
+<script type="text/javascript">
+    var myCanvas = document.querySelector("#canvas");
+    var context = myCanvas.getContext("2d");
+    var wrap = document.querySelector(".wrap");
+    var list = document.querySelector(".list");
+    var turns = document.querySelector(".return");
+
+    // 页面翻转效果
+    function transform() {
+        wrap.style.transform = "translateX(100%) rotateY(15deg)";
+        turns.style.display = "none";
+    }
+
+    function restore() {
+        wrap.style.transform = "";
+        setTimeout(function() {
+            turns.style.display = "block";
+        }, 200);
+    }
+    // 封装随机函数
+    function rand(min, max) {
+        return Math.random() * (max - min + 1) + min;
+    }
+
+    // 星图
+    canvas("canvas", 230, 1000, 60, 2, 50000, 0.5);
+
+    // 打字效果
+    var datas = [
+        $('.type_word').data("text-1"),
+        $('.type_word').data("text-2"),
+        $('.type_word').data("text-3"),
+        $('.type_word').data("text-4")
+    ];
+    var nowData = {};
+    nowData.val = 0;
+
+    // 主页打字效果
+    function typeWord() {
+        var vp = datas[nowData.val].split("");
+        var typeTimer = null;
+
+        vp.shift = function() {
+            if (this.length >= 1) {
+                return Array.prototype.shift.apply(this);
+            } else {
+                clearInterval(typeTimer);
+                nowData.rotate();
+                return "";
+            }
+        }
+
+        typeTimer = setInterval(function() {
+            var newspan = document.createElement("span");
+            newspan.innerHTML = vp.shift();
+            $('.type_word').append(newspan);
+        }, 100);
+    }
+
+    function deleteWord() {
+        var spans = Array.prototype.slice.call($(".type_word").children());
+
+        var hl = function(span) {
+            if (span != null) {
+                span.className = "highlight";
+            }
+        }
+
+        window.setInterval(function() {
+            hl(spans.pop());
+        }, 12);
+
+        window.setTimeout(function() {
+            $(".type_word").html("");
+        }, 500);
+    }
+
+    nowData.rotate = function() {
+        window.setTimeout(function() {
+            deleteWord();
+        }, 1500);
+
+        window.setTimeout(function() {
+            typeWord();
+        }, 2000);
+        this.val = (this.val + 1) % 4;
+    }
+    nowData.rotate();
+
+    // 切换页面
+    function changePage() {
+        var currentPage = 0;
+        var pageTurns = $(".page_turn");
+        var pages = $(".page");
+
+
+        pageTurns.on("click", function() {
+            var index = $(this).index();
+            restore();
+            if(index === currentPage){
+                return;
+            }
+            setTimeout(function() {
+                pages.eq(currentPage).addClass('current scaleDown');
+                pages.eq(index).addClass('current moveFromLeft ontop');
+            },1000);
+            setTimeout(function() {
+                console.log(currentPage,index);
+                pages.eq(currentPage).removeClass('current scaleDown');
+                pages.eq(index).removeClass('current moveFromLeft ontop');
+                pages.eq(index).addClass('current');
+                currentPage = index;
+            }, 1700);
+        });
+
+    }
+
+    // 信息展示页面
+    $(".information").on("mouseover", function() {
+        $(this).css("width","400%");
+        $(".description").eq($(this).index()).fadeIn(300);
+    });
+    $(".information").on("mouseleave", function() {
+        $(this).css("width","100%");
+        $(".description").eq($(this).index()).fadeOut(300);
+    });
+
+
+
+
+
+
+
+    changePage();
+    turns.addEventListener("mouseover", transform, false);
+    list.addEventListener("mouseleave", restore, false);
+</script>
+
+</html>

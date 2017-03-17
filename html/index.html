@@ -2,9 +2,11 @@
 <html>
 
 <head>
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"> -->
     <meta charset="utf-8">
     <title>墨画情</title>
     <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="img/title.ico" type="">
 </head>
 
 <body>
@@ -28,13 +30,52 @@
                     <section class="second page">
                         <div class="personal">
                             <div class="information one">
-                                <div class="description"></div>
+                                <div class="close_btn">
+                                    X
+                                </div>
+                                <div class="article">
+                                    <div class="content">
+                                        <span class="important">夏伏阳</span>，我的名字。一个乐观善良，简单质朴，讲求原则，内敛而不失热情的人，熟识我的人都会知道我并不是那么羞涩，
+                                        只要几句话，马上就能暴露我的“真面目”。<br /><br />
+                                        <span class="essay">我有幸在金华职业技术学院的软件技术专业学习专业知识。学习，虽然万般艰难，但是最终硕果累累的时候，
+                                            才能感受到其带来的美妙。前端，是一个美妙的东西，它打开了我对网页的认知；那些绚烂多彩的网页，只有细细品味，才能感受其精妙。</span>
+                                            <span class="essay">热爱生活、性情奔放，我总会安排好自己的时间，为了每天不虚度而寻找着新鲜的未知。</span><br /><br />
+                                            <span class="essay">这就是我，不同于他人自由的我。</span>
+                                    </div>
+                                </div>
+                                <div class="description">
+                                    <h1 class="h_line">个人介绍</h1>
+                                </div>
                             </div>
                             <div class="information two">
-                                <div class="description"></div>
+                                <div class="close_btn">
+                                    X
+                                </div>
+                                <div class="article">
+
+                                </div>
+                                <div class="description">
+                                    <h1 class="h_line">作品欣赏</h1>
+                                </div>
                             </div>
                             <div class="information three">
-                                <div class="description"></div>
+                                <div class="close_btn">
+                                    X
+                                </div>
+                                <div class="article">
+                                    <h2>联系我</h2>
+                                    <h3>contact me</h3>
+                                    <ul class="contact">
+                                        <li><div class="tubiao pic1"></div><div class="contact_way">手机：15856949282</div></li>
+                                        <li><div class="tubiao pic2"></div><div class="contact_way">QQ：784915529</div></li>
+                                        <li><div class="tubiao pic3"></div><div class="contact_way weixin"></div></li>
+                                        <li><div class="tubiao pic4"></div><div class="contact_way">邮箱：1427307634@qq.com</div></li>
+                                    </ul>
+                                    <div class="bigZoom"></div>
+                                </div>
+                                <div class="description">
+                                    <h1 class="h_line">联系方式</h1>
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -176,8 +217,8 @@
                 pages.eq(currentPage).addClass('current scaleDown');
                 pages.eq(index).addClass('current moveFromLeft ontop');
             },1000);
+            
             setTimeout(function() {
-                console.log(currentPage,index);
                 pages.eq(currentPage).removeClass('current scaleDown');
                 pages.eq(index).removeClass('current moveFromLeft ontop');
                 pages.eq(index).addClass('current');
@@ -190,18 +231,56 @@
     // 信息展示页面
     $(".information").on("mouseover", function() {
         $(this).css("width","400%");
+        $(".h_line").css("line-height", $(".description").height()+"px");
         $(".description").eq($(this).index()).fadeIn(300);
     });
+
     $(".information").on("mouseleave", function() {
         $(this).css("width","100%");
-        $(".description").eq($(this).index()).fadeOut(300);
+        $(".description").eq($(this).index()).fadeOut(50);
     });
 
+    $(".information").on("click", function() {
+        $(".information").css("width","0");
+        $(this).css("width","100%");
+        $(".description").eq($(this).index()).fadeOut(50);
+        $(".information").off("mouseover");
+        $(".article").eq($(this).index()).fadeIn(1);
+        $(".close_btn").eq($(this).index()).fadeIn(1);
+    });
 
+    $(".close_btn").on("click", function(event) {
+        event.stopPropagation();
+        $(".information").css("width","100%");
+        $(this).fadeOut(1);
+        $(".article").eq($(this).parent().index()).fadeOut(1);
+        $(".information").on("mouseover", function() {
+            $(this).css("width","400%");
+            $(".h_line").css("line-height", $(".description").height()+"px");
+            $(".description").eq($(this).index()).fadeIn(300);
+        });
+    });
 
+    $(".contact li").on("mouseover", function() {
+        $(".contact li").css("width","0");
+        $(this).css("width","400%");
+        $(".tubiao").eq($(this).index()).css("margin","0");
+        $(".contact_way").eq($(this).index()).fadeIn("fast");
+    });
 
+    $(".contact li").on("mouseleave", function() {
+        $(".contact li").css("width","100%");
+        $(".tubiao").eq($(this).index()).css("margin","0 auto");
+        $(".contact_way").eq($(this).index()).fadeOut(1);
+    });
 
+    $(".weixin").on("click", function() {
+        $(".bigZoom").fadeIn(1);
+    });
 
+    $(".bigZoom").on("click", function() {
+        $(".bigZoom").fadeOut(1);
+    });
 
     changePage();
     turns.addEventListener("mouseover", transform, false);
